@@ -200,6 +200,10 @@ class RelType(CustomJSONSerializable):
         return '{}({})'.format(self.tmp, ', '.join(str(attr) for attr in self.attrs))
     def str_attr_names_and_types(self):
         return [attr.str_name_and_type_only() for attr in self.attrs]
+    def attr_names(self):
+        return [attr.name for attr in self.attrs]
+    def attr_types(self):
+        return [attr.type for attr in self.attrs]
     def sql_rel(self):
         return 'rat{}'.format(self.tmp)
     def sql_attr(self, i):

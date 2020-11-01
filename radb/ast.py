@@ -310,6 +310,16 @@ class RelExpr(Node):
             context.db.execute_and_print_result(query)
         except Exception as e:
             raise ExecutionError('SQL error in translated query:\n{}\n{}'.format(query, e)) from e
+    def executeRes(self, context):
+        blocks = [block for block in self.sql()]
+        assert(len(blocks) > 0)
+        query = 'WITH ' + ',\n     '.join(blocks)
+        query += '\nSELECT * FROM {}'.format(self.type.sql_rel())
+        logger.debug('SQL generated:\n' + query)
+        try:
+            return (self.type.attr_names(), self.type.attr_types(), context.db.execute(query))
+        except Exception as e:
+            raise ExecutionError('SQL error in translated query:\n{}\n{}'.format(query, e)) from e
     @staticmethod
     def from_view_def(view_def):
         return one_statement_from_string(view_def + literal(sym.TERMINATOR))
