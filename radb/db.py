@@ -35,7 +35,10 @@ class DB:
 
     def list(self):
         return self.inspector.get_table_names()
-
+    
+    def share_connection(self):
+        return self.conn
+    
     def table_exists(self, table):
         # safer than comparing against self.list() because it seems to
         # respect the case-sensivitity convention of the dbms.
